@@ -1,7 +1,9 @@
-import 'package:flutter/material.dart';
+ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:noticeboard_system/controller/controller.dart';
 import 'package:noticeboard_system/core/styles.dart';
+import 'package:noticeboard_system/data/source/firebase_source/auth.dart';
+import 'package:noticeboard_system/ui/auth/login/view/login.dart';
 import 'package:provider/provider.dart';
 
 class RegistrationScreen extends StatefulWidget {
@@ -12,10 +14,17 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  int? val;
+  final _globalFormKey = GlobalKey<FormState>();
+  final _firstname = TextEditingController();
+  final _lastname = TextEditingController();
+  final _email = TextEditingController();
+  final _phone = TextEditingController();
+  final _password = TextEditingController();
+  String? gender;
+  String? userRole;
 
+  int? val;
+ 
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -54,6 +63,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           height: SizeConfig.minBlockVertical! * 5,
                         ),
                         Form(
+                          key: _globalFormKey,
                           child: Column(
                             children: [
                               Row(
@@ -64,7 +74,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                       fillColor: Colors.transparent,
                                       hintText: "First Name",
                                       hitColor: kWhiteColor,
-                                      controller: _passwordController,
+                                      controller: _firstname,
                                       validator: (value) {
                                         if (value!.trim().isEmpty) {
                                           return 'Field cannot be empty';
@@ -82,7 +92,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                       fillColor: Colors.transparent,
                                       hintText: "Last Name",
                                       hitColor: kWhiteColor,
-                                      controller: _passwordController,
+                                      controller: _lastname,
                                       validator: (value) {
                                         if (value!.trim().isEmpty) {
                                           return 'Field cannot be empty';
@@ -103,7 +113,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 hitColor: kWhiteColor,
                                 enablePrefix: true,
                                 preicon: Icons.mail,
-                                controller: _emailController,
+                                controller: _email,
                                 validator: (value) {
                                   Pattern pattern =
                                       r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
@@ -245,7 +255,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 fillColor: Colors.transparent,
                                 hintText: "Mobile No",
                                 hitColor: kWhiteColor,
-                                controller: _passwordController,
+                                controller: _phone,
                                 validator: (value) {
                                   if (value!.trim().isEmpty) {
                                     return 'Field cannot be empty';
@@ -264,7 +274,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 hitColor: kWhiteColor,
                                 enablePrefix: true,
                                 preicon: Icons.lock,
-                                controller: _passwordController,
+                                controller: _password,
                                 validator: (value) {
                                   if (value!.trim().isEmpty) {
                                     return 'Password cannot be empty';
@@ -297,7 +307,27 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 fontSize: 18,
                                 fontWeight: FontWeight.w400),
                           ),
-                          onPressed: () {},
+                          onPressed: () async {
+                            val == 1 ? gender = "Male" : gender = "Female";
+
+                            if (_globalFormKey.currentState!.validate()) {
+                              await AuthFirebase().register(
+                                firstname: _firstname.text,
+                                lastname: _lastname.text,
+                                email: _email.text,
+                                password: _password.text,
+                                phone: _phone.text,
+                                gender: gender,
+                                userRole: userProvider.role,
+                              );
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => const LoginScreen(),
+                                ),
+                              );
+                            }
+                          },
                           color: kSuccessColor,
                         ),
                         SizedBox(

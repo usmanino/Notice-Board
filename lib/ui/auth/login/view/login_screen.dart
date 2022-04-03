@@ -1,10 +1,12 @@
 import 'dart:async';
-
+ 
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:noticeboard_system/controller/controller.dart';
 import 'package:noticeboard_system/core/styles.dart';
-import 'package:noticeboard_system/router/app_router.dart';
+ import 'package:noticeboard_system/router/app_router.dart';
+import 'package:noticeboard_system/ui/home/view/home.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -15,16 +17,19 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _globalFormKey = GlobalKey<FormState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   bool isPress = false;
-
+  
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     final userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
+      key: _scaffoldKey,
       body: GradientTile(
         child: SafeArea(
           child: Container(
@@ -58,6 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           height: SizeConfig.minBlockVertical! * 5,
                         ),
                         Form(
+                          key: _globalFormKey,
                           child: Column(
                             children: [
                               InputBox(
@@ -134,16 +140,75 @@ class _LoginScreenState extends State<LoginScreen> {
                                   strokeWidth: 1.5,
                                 ),
                           onPressed: () {
-                            setState(() {
-                              isPress = true;
-                            });
-                            Timer(const Duration(seconds: 1), () {
+                            // Navigator.pushReplacement(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) => const HomeScreen(),
+                            //   ),
+                            // );
+                            if (_globalFormKey.currentState!.validate()) {
                               setState(() {
-                                isPress = false;
+                                isPress = true;
                               });
-                              Navigator.pushNamedAndRemoveUntil(context,
-                                  NoticeBoardScreen.home, (route) => false);
-                            });
+                              Timer(
+                                const Duration(seconds: 1),
+                                () async {
+                                  setState(
+                                    () {
+                                      isPress = false;
+                                    },
+                                  );
+
+                                  FirebaseDatabase.instance
+                                      .ref('register/')
+                                      .onValue
+                                      .listen(
+                                    (event) {
+                                      final data = Map<String, dynamic>.from(
+                                        event.snapshot.value as Map,
+                                      );
+
+                                      data.forEach(
+                                        (key, value) {
+                                          final nestOrder =
+                                              Map<String, dynamic>.from(
+                                                  value as Map);
+                                          String _email = nestOrder["email"];
+                                          String _password =
+                                              nestOrder["password"];
+
+                                          if (_emailController.text.trim() !=
+                                                  _email &&
+                                              _passwordController.text.trim() !=
+                                                  _password) {
+                                            displayErrorMessage(
+                                                error: 'error',
+                                                context: context,
+                                                scaffoldKey: _scaffoldKey,
+                                                popStack: false);
+                                          } else if (_emailController.text
+                                                      .trim() ==
+                                                  _email &&
+                                              _passwordController.text.trim() ==
+                                                  _password) {
+                                            userProvider.setUserRole =
+                                                nestOrder;
+
+                                            Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const HomeScreen(),
+                                              ),
+                                            );
+                                          }
+                                        },
+                                      );
+                                    },
+                                  );
+                                },
+                              );
+                            }
                           },
                           color: kSuccessColor,
                         ),

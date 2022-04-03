@@ -1,0 +1,83 @@
+{
+  "project_info": {
+    "project_number": "434380980917",
+    "firebase_url": "https://genera-ce1be-default-rtdb.firebaseio.com",
+    "project_id": "genera-ce1be",
+    "storage_bucket": "genera-ce1be.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:434380980917:android:0011079ad71951940cf4fc",
+        "android_client_info": {
+          "package_name": "com.example.noticeboard_system"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "434380980917-gliaf2fnbha7bpo3gembodi2m035k2d2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8Hal6zqED5Z3u-qHtNqUMc6qh-wtfteY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "434380980917-gliaf2fnbha7bpo3gembodi2m035k2d2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "434380980917-c2ig70ndi1jkejsv4tv3bqdh0ocqt5ju.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.uberRider"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:434380980917:android:fe653e3badfff5a10cf4fc",
+        "android_client_info": {
+          "package_name": "com.example.uber_rider"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "434380980917-gliaf2fnbha7bpo3gembodi2m035k2d2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8Hal6zqED5Z3u-qHtNqUMc6qh-wtfteY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "434380980917-gliaf2fnbha7bpo3gembodi2m035k2d2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "434380980917-c2ig70ndi1jkejsv4tv3bqdh0ocqt5ju.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.uberRider"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

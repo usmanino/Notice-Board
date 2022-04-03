@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:noticeboard_system/core/styles.dart';
+ import 'package:noticeboard_system/core/styles.dart';
 
 class SolidButton extends StatelessWidget {
   final Widget child;
@@ -30,7 +29,7 @@ class SolidButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return Container(
+    return SizedBox(
       width: width,
       height: 50,
       child: ElevatedButton(

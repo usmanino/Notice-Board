@@ -1,3 +1,4 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:noticeboard_system/core/styles.dart';
@@ -11,8 +12,6 @@ class DisplayStudenScreen extends StatefulWidget {
 
 class _DisplayStudenScreenState extends State<DisplayStudenScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  final _dialogKey = GlobalKey<State>();
   bool isPress = false;
   @override
   Widget build(BuildContext context) {
@@ -33,79 +32,103 @@ class _DisplayStudenScreenState extends State<DisplayStudenScreen> {
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          child: ListView.separated(
-            separatorBuilder: (context, index) => const SizedBox(
-              height: 20,
-            ),
-            itemCount: 20,
-            itemBuilder: (context, index) {
-              return Card(
-                elevation: 3,
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                    top: 15,
-                    bottom: 15,
-                    left: 10,
-                    right: 10,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
+          child: StreamBuilder(
+            stream: FirebaseDatabase.instance
+                .ref('register/')
+                .orderByChild('userRole')
+                .equalTo('Student')
+                .onValue,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              if (snapshot.hasData &&
+                  snapshot.connectionState == ConnectionState.active) {
+                final res = <Widget>[];
+                final myOrder = Map<String, dynamic>.from(
+                    (snapshot.data! as dynamic).snapshot.value);
+
+                myOrder.forEach((key, value) {
+                  final nextOrder = Map<String, dynamic>.from(value);
+                  final data = Card(
+                    elevation: 3,
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        top: 15,
+                        bottom: 15,
+                        left: 10,
+                        right: 10,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          Row(
+                            children: [
+                              Text(
+                                'Fullnmae: ${nextOrder['firstname']}',
+                                style: GoogleFonts.inter(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              SizedBox(
+                                width: SizeConfig.minBlockHorizontal,
+                              ),
+                              Text(
+                                '${nextOrder['lastname']}',
+                                style: GoogleFonts.inter(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: SizeConfig.minBlockVertical,
+                          ),
                           Text(
-                            "FName",
+                            'Gender: ${nextOrder['gender']}',
                             style: GoogleFonts.inter(
                               fontSize: 16,
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w300,
                             ),
                           ),
                           SizedBox(
-                            width: SizeConfig.minBlockHorizontal,
+                            height: SizeConfig.minBlockVertical,
                           ),
                           Text(
-                            "lName",
+                            'Email: ${nextOrder['email']}',
                             style: GoogleFonts.inter(
                               fontSize: 16,
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w300,
+                            ),
+                          ),
+                          SizedBox(
+                            height: SizeConfig.minBlockVertical,
+                          ),
+                          Text(
+                            'Phone Number: ${nextOrder['phone']}',
+                            style: GoogleFonts.inter(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w300,
                             ),
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: SizeConfig.minBlockVertical,
-                      ),
-                      Text(
-                        "Male",
-                        style: GoogleFonts.inter(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w300,
-                        ),
-                      ),
-                      SizedBox(
-                        height: SizeConfig.minBlockVertical,
-                      ),
-                      Text(
-                        "usman@gmail.com",
-                        style: GoogleFonts.inter(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w300,
-                        ),
-                      ),
-                      SizedBox(
-                        height: SizeConfig.minBlockVertical,
-                      ),
-                      Text(
-                        "0902938474",
-                        style: GoogleFonts.inter(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w300,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
+                    ),
+                  );
+
+                  res.add(data);
+                });
+
+                return Column(
+                  children: res,
+                );
+              } else {
+                return Container();
+              }
             },
           ),
         ),

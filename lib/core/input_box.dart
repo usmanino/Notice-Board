@@ -111,6 +111,9 @@ class InputBox extends StatelessWidget {
           fontSize: fontSize,
           color: hitColor,
         ),
+        errorStyle: const TextStyle(
+          color: Colors.white,
+        ),
         hintText: hintText,
         labelStyle: TextStyle(
           color: labelColor,

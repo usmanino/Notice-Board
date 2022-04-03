@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:noticeboard_system/controller/user_provider.dart';
 import 'package:noticeboard_system/core/styles.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class AdminScreen extends StatefulWidget {
@@ -13,13 +15,14 @@ class AdminScreen extends StatefulWidget {
 class _AdminScreenState extends State<AdminScreen> {
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
       backgroundColor: kBackgroundColor2,
       appBar: AppBar(
         centerTitle: false,
         backgroundColor: const Color.fromARGB(255, 14, 182, 159),
         title: Text(
-          'View Admin',
+          'View profile',
           style: GoogleFonts.inter(
             fontSize: 16,
             fontWeight: FontWeight.w500,
@@ -42,10 +45,10 @@ class _AdminScreenState extends State<AdminScreen> {
                       height: 200,
                       width: SizeConfig.screenWidth,
                       decoration: const BoxDecoration(
-                        color: const Color.fromARGB(255, 14, 182, 159),
+                        color: Color.fromARGB(255, 14, 182, 159),
                       ),
                       child: Column(
-                        children: [],
+                        children: const [],
                       ),
                     ),
                   ),
@@ -83,14 +86,14 @@ class _AdminScreenState extends State<AdminScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Usman Adebayo',
+                                    "${userProvider.getUserRole['firstname']} ${userProvider.getUserRole['lastname']}",
                                     style: GoogleFonts.inter(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
                                   Text(
-                                    'Admin',
+                                    userProvider.getUserRole['userRole'],
                                     style: GoogleFonts.inter(
                                       fontSize: 13,
                                       fontWeight: FontWeight.w400,
@@ -113,7 +116,7 @@ class _AdminScreenState extends State<AdminScreen> {
                                 width: 5,
                               ),
                               Text(
-                                'Male',
+                                userProvider.getUserRole['gender'],
                                 style: GoogleFonts.inter(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w500,
@@ -132,7 +135,7 @@ class _AdminScreenState extends State<AdminScreen> {
                                 width: 5,
                               ),
                               Text(
-                                '26 may 1997',
+                                userProvider.getUserRole['Date'],
                                 style: GoogleFonts.inter(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w500,
@@ -180,7 +183,7 @@ class _AdminScreenState extends State<AdminScreen> {
                                 width: 5,
                               ),
                               Text(
-                                '09084738333',
+                                userProvider.getUserRole['phone'],
                                 style: GoogleFonts.inter(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w500,
@@ -199,7 +202,7 @@ class _AdminScreenState extends State<AdminScreen> {
                                 width: 5,
                               ),
                               Text(
-                                'usman@gmail.com',
+                                userProvider.getUserRole['email'],
                                 style: GoogleFonts.inter(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w500,

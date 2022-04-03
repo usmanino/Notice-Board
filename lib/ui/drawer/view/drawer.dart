@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:noticeboard_system/controller/user_provider.dart';
 import 'package:noticeboard_system/core/styles.dart';
 import 'package:noticeboard_system/router/app_router.dart';
 import 'package:noticeboard_system/ui/drawer/widget/slide_tiles.dart';
+import 'package:provider/provider.dart';
 
 class SideNav extends StatelessWidget {
   const SideNav({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
     return SizedBox(
       width: 280,
       child: Drawer(
@@ -52,7 +55,7 @@ class SideNav extends StatelessWidget {
                         children: [
                           Flexible(
                             child: Text(
-                              'John Wlliems',
+                              "${userProvider.getUserRole['firstname']} ${userProvider.getUserRole['lastname']}",
                               style: GoogleFonts.poppins(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w600,
@@ -61,7 +64,7 @@ class SideNav extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            'Johnwilliems@gmail.com',
+                            userProvider.getUserRole['email'],
                             style: GoogleFonts.poppins(
                               fontSize: 12,
                               fontWeight: FontWeight.w400,
@@ -98,32 +101,55 @@ class SideNav extends StatelessWidget {
               thickness: 1,
             ),
             const SizedBox(height: 3),
-            Padding(
-              padding: const EdgeInsets.only(left: 10),
-              child: Text(
-                'Category',
-                style: GoogleFonts.inter(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.grey,
+            if (userProvider.getUserRole['userRole'] == 'Student')
+              ...{}
+            else if (userProvider.getUserRole['userRole'] == 'Lecturer') ...{
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Text(
+                  'Category',
+                  style: GoogleFonts.inter(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.grey,
+                  ),
                 ),
               ),
-            ),
-            SileTiles(
-              text: "Student",
-              icon: Icons.school,
-              onTap: () {
-                Navigator.pushNamed(context, NoticeBoardScreen.viewStudent);
-              },
-            ),
-            const SizedBox(height: 3),
-            SileTiles(
-              text: "Lecturer",
-              icon: Icons.supervisor_account,
-              onTap: () {
-                Navigator.pushNamed(context, NoticeBoardScreen.viewlecturer);
-              },
-            ),
+              SileTiles(
+                text: "Student",
+                icon: Icons.school,
+                onTap: () {
+                  Navigator.pushNamed(context, NoticeBoardScreen.viewStudent);
+                },
+              ),
+            } else ...{
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Text(
+                  'Category',
+                  style: GoogleFonts.inter(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.grey,
+                  ),
+                ),
+              ),
+              SileTiles(
+                text: "Student",
+                icon: Icons.school,
+                onTap: () {
+                  Navigator.pushNamed(context, NoticeBoardScreen.viewStudent);
+                },
+              ),
+              const SizedBox(height: 3),
+              SileTiles(
+                text: "Lecturer",
+                icon: Icons.supervisor_account,
+                onTap: () {
+                  Navigator.pushNamed(context, NoticeBoardScreen.viewlecturer);
+                },
+              ),
+            },
             const SizedBox(height: 3),
             Padding(
               padding: const EdgeInsets.only(left: 10),
