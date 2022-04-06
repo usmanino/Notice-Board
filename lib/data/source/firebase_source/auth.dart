@@ -1,5 +1,7 @@
-import 'package:firebase_core/firebase_core.dart';
+import 'dart:io';
+import 'package:firebase_core/firebase_core.dart' as firebase_core;
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:intl/intl.dart';
 
 class AuthFirebase {
@@ -34,7 +36,7 @@ class AuthFirebase {
           return value;
         },
       );
-    } on FirebaseException catch (e) {
+    } on firebase_storage.FirebaseException catch (e) {
       return e;
     }
   }
@@ -62,7 +64,7 @@ class AuthFirebase {
           return value;
         },
       );
-    } on FirebaseException catch (e) {
+    } on firebase_storage.FirebaseException catch (e) {
       return e;
     }
   }
@@ -90,8 +92,37 @@ class AuthFirebase {
           return value;
         },
       );
-    } on FirebaseException catch (e) {
+    } on firebase_storage.FirebaseException catch (e) {
       return e;
+    }
+  }
+
+  Future<void> uploadImage(
+      {required String imageName, required String imagePath}) async {
+    File file = File(
+        " /data/user/0/com.example.noticeboard_system/cache/image_picker6173076920158267450.png");
+
+    try {
+      await firebase_storage.FirebaseStorage.instance
+          .ref('images/imageName')
+          .putFile(file);
+    } on firebase_core.FirebaseException catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> uploadFile({required String filePath}) async {
+    File file = File(filePath);
+
+    try {
+      final storeImage =
+          firebase_storage.FirebaseStorage.instance.ref().child('uploads/');
+      await storeImage.putFile(file);
+      String imageUrl = await storeImage.getDownloadURL();
+      print('----------------------------');
+      print(imageUrl);
+    } on firebase_core.FirebaseException catch (e) {
+      print(e);
     }
   }
 }

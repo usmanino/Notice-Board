@@ -1,4 +1,3 @@
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:noticeboard_system/controller/user_provider.dart';
@@ -8,9 +7,7 @@ import 'package:noticeboard_system/ui/auth/login/view/login_screen.dart';
 import 'package:noticeboard_system/ui/drawer/view/drawer.dart';
 import 'package:noticeboard_system/ui/home/widget/admin_lecturer.dart';
 import 'package:noticeboard_system/ui/home/widget/admin_student.dart';
-import 'package:noticeboard_system/ui/home/widget/expired_screen.dart';
 import 'package:noticeboard_system/ui/home/widget/lecturer_student.dart';
-import 'package:noticeboard_system/ui/home/widget/ongoing_screen.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {

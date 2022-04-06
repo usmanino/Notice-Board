@@ -9,12 +9,12 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Listener(
-      onPointerDown: (_) {
-        final FocusScopeNode currentScope = FocusScope.of(context);
-        if (!currentScope.hasPrimaryFocus && currentScope.hasFocus) {
-          FocusManager.instance.primaryFocus!.unfocus();
-        }
-      },
+      // onPointerDown: (_) {
+      //   final FocusScopeNode currentScope = FocusScope.of(context);
+      //   if (!currentScope.hasPrimaryFocus && currentScope.hasFocus) {
+      //     FocusManager.instance.primaryFocus!.unfocus();
+      //   }
+      // },
       child: Sizer(builder: (context, orientation, deviceType) {
         return MaterialApp(
           title: 'Eazy Commute',

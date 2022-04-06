@@ -47,81 +47,99 @@ class _DisplayStudenScreenState extends State<DisplayStudenScreen> {
               if (snapshot.hasData &&
                   snapshot.connectionState == ConnectionState.active) {
                 final res = <Widget>[];
-                final myOrder = Map<String, dynamic>.from(
-                    (snapshot.data! as dynamic).snapshot.value);
 
-                myOrder.forEach((key, value) {
-                  final nextOrder = Map<String, dynamic>.from(value);
-                  final data = Card(
-                    elevation: 3,
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        top: 15,
-                        bottom: 15,
-                        left: 10,
-                        right: 10,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                'Fullnmae: ${nextOrder['firstname']}',
-                                style: GoogleFonts.inter(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              SizedBox(
-                                width: SizeConfig.minBlockHorizontal,
-                              ),
-                              Text(
-                                '${nextOrder['lastname']}',
-                                style: GoogleFonts.inter(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: SizeConfig.minBlockVertical,
-                          ),
-                          Text(
-                            'Gender: ${nextOrder['gender']}',
-                            style: GoogleFonts.inter(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w300,
-                            ),
-                          ),
-                          SizedBox(
-                            height: SizeConfig.minBlockVertical,
-                          ),
-                          Text(
-                            'Email: ${nextOrder['email']}',
-                            style: GoogleFonts.inter(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w300,
-                            ),
-                          ),
-                          SizedBox(
-                            height: SizeConfig.minBlockVertical,
-                          ),
-                          Text(
-                            'Phone Number: ${nextOrder['phone']}',
-                            style: GoogleFonts.inter(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w300,
-                            ),
-                          ),
-                        ],
+                if (snapshot.data == null ||
+                    (snapshot.data! as dynamic).snapshot.value == null) {
+                  res.add(SizedBox(
+                    height: MediaQuery.of(context).size.height - 100,
+                    child: Center(
+                      child: Text(
+                        'You don’t have  \n a student',
+                        style: GoogleFonts.inter(
+                          fontSize: 25,
+                          fontWeight: FontWeight.w500,
+                          color: kInActiveColor,
+                        ),
                       ),
                     ),
-                  );
+                  ));
+                } else {
+                  final myOrder = Map<String, dynamic>.from(
+                      (snapshot.data! as dynamic).snapshot.value);
 
-                  res.add(data);
-                });
+                  myOrder.forEach((key, value) {
+                    final nextOrder = Map<String, dynamic>.from(value);
+                    final data = Card(
+                      elevation: 3,
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          top: 15,
+                          bottom: 15,
+                          left: 10,
+                          right: 10,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  'Fullnmae: ${nextOrder['firstname']}',
+                                  style: GoogleFonts.inter(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: SizeConfig.minBlockHorizontal,
+                                ),
+                                Text(
+                                  '${nextOrder['lastname']}',
+                                  style: GoogleFonts.inter(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: SizeConfig.minBlockVertical,
+                            ),
+                            Text(
+                              'Gender: ${nextOrder['gender']}',
+                              style: GoogleFonts.inter(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w300,
+                              ),
+                            ),
+                            SizedBox(
+                              height: SizeConfig.minBlockVertical,
+                            ),
+                            Text(
+                              'Email: ${nextOrder['email']}',
+                              style: GoogleFonts.inter(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w300,
+                              ),
+                            ),
+                            SizedBox(
+                              height: SizeConfig.minBlockVertical,
+                            ),
+                            Text(
+                              'Phone Number: ${nextOrder['phone']}',
+                              style: GoogleFonts.inter(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w300,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+
+                    res.add(data);
+                  });
+                }
 
                 return Column(
                   children: res,

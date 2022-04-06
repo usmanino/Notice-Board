@@ -1,11 +1,11 @@
 import 'dart:async';
- 
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:noticeboard_system/controller/controller.dart';
 import 'package:noticeboard_system/core/styles.dart';
- import 'package:noticeboard_system/router/app_router.dart';
+import 'package:noticeboard_system/router/app_router.dart';
 import 'package:noticeboard_system/ui/home/view/home.dart';
 import 'package:provider/provider.dart';
 
@@ -23,7 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
 
   bool isPress = false;
-  
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -140,12 +140,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                   strokeWidth: 1.5,
                                 ),
                           onPressed: () {
-                            // Navigator.pushReplacement(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //     builder: (context) => const HomeScreen(),
-                            //   ),
-                            // );
                             if (_globalFormKey.currentState!.validate()) {
                               setState(() {
                                 isPress = true;
@@ -178,14 +172,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                               nestOrder["password"];
 
                                           if (_emailController.text.trim() !=
-                                                  _email &&
+                                                  _email ||
                                               _passwordController.text.trim() !=
                                                   _password) {
                                             displayErrorMessage(
-                                                error: 'error',
+                                                error: 'error login details',
                                                 context: context,
                                                 scaffoldKey: _scaffoldKey,
-                                                popStack: false);
+                                                  popStack: false);
                                           } else if (_emailController.text
                                                       .trim() ==
                                                   _email &&

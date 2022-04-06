@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:noticeboard_system/controller/controller.dart';
 import 'package:noticeboard_system/core/styles.dart';
 import 'package:noticeboard_system/data/source/firebase_source/auth.dart';
@@ -20,7 +22,27 @@ class _AddNoticeScreenState extends State<AddNoticeScreen> {
   final _descriptionController = TextEditingController();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _dialogKey = GlobalKey<State>();
+  List<String> _imagePath = [], _imageName = [];
+
+  List<XFile>? _image;
   bool isPress = false;
+
+  _loadImage() async {
+    try {
+      final _picker = ImagePicker();
+      //     // Pick an image
+      final List<XFile>? image = await _picker.pickMultiImage();
+      if (image != null) {
+        setState(() {
+          _image = image;
+        });
+      } else {
+        print("No image is selected.");
+      }
+    } catch (e) {
+      return "error while picking file.";
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -110,27 +132,90 @@ class _AddNoticeScreenState extends State<AddNoticeScreen> {
                         SizedBox(
                           height: SizeConfig.minBlockVertical! * 3,
                         ),
-                        // InputBox(
-                        //   readonly: true,
-                        //   controller: _dateController,
-                        //   validator: (value) {
-                        //     if (value!.trim().isEmpty) {
-                        //       return 'field cannot be empty';
-                        //     }
-
-                        //     return null;
-                        //   },
-                        //   enableSurfix: true,
-                        //   suricon: Icons.date_range,
-                        //   inputType: TextInputType.text,
-                        //   hintText: 'Last Date',
-                        //   textColor: kDarkColor,
-                        // ),
+                        Container(
+                          height: 100.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            border: Border.all(
+                              color: Colors.grey,
+                              width: 1.0,
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    child: _image == null
+                                        ? Image.asset('assets/image/logo.png')
+                                        : SingleChildScrollView(
+                                            scrollDirection: Axis.horizontal,
+                                            physics:
+                                                const BouncingScrollPhysics(),
+                                            child: Row(
+                                              children: _image!.map((e) {
+                                                print(e.path);
+                                                setState(() {
+                                                  _imagePath.add(e.path);
+                                                });
+                                                return Card(
+                                                  child: SizedBox(
+                                                    height: 100,
+                                                    width: 100,
+                                                    child: Image.file(
+                                                      File(e.path),
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  ),
+                                                );
+                                              }).toList(),
+                                            ),
+                                          ),
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                margin: const EdgeInsets.only(right: 10.0),
+                                child: SolidButton(
+                                  width: 85,
+                                  child: isPress == false
+                                      ? Text(
+                                          'upload',
+                                          textAlign: TextAlign.center,
+                                          style: GoogleFonts.poppins(
+                                            color: kWhiteColor,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        )
+                                      : const CircularProgressIndicator(
+                                          color: Colors.white,
+                                          strokeWidth: 1.5,
+                                        ),
+                                  onPressed: () {
+                                    setState(() {
+                                      _loadImage();
+                                    });
+                                  },
+                                  color: const Color.fromARGB(
+                                    255,
+                                    14,
+                                    182,
+                                    159,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                         SizedBox(
                           height: SizeConfig.minBlockVertical! * 3,
                         ),
                         InputArea(
                           controller: _descriptionController,
+                          
                           validator: (value) {
                             if (value!.trim().isEmpty) {
                               return;
@@ -164,6 +249,28 @@ class _AddNoticeScreenState extends State<AddNoticeScreen> {
                               isPress = true;
                             });
 
+                            // print(_imagePath);
+                            // AuthFirebase()
+                            //     .uploadFile(filePath: _imagePath.toString());
+
+                            // AuthFirebase().uploadImage(
+                            //   imageName: 'e.name',
+                            //   imagePath: 'e.path',
+                            // );
+
+                            // _image!.map(
+                            //   (e) {
+                            //     AuthFirebase()
+                            //         .uploadImage(
+                            //       imageName: e.name,
+                            //       imagePath: e.path,
+                            //     )
+                            //         .then((value) {
+                            //       print(value);
+                            //       print('object');
+                            //     });
+                            //   },
+                            // );
                             if (userProvider.getUserRole['userRole'] ==
                                 'Admin') {
                               AuthFirebase().addNoteAdmin(
@@ -190,9 +297,9 @@ class _AddNoticeScreenState extends State<AddNoticeScreen> {
                                 text: 'Notice created successful',
                               );
                             });
-                            // Timer(const Duration(seconds: 2), () {
-                            //   Navigator.pop(context);
-                            // });
+                            Timer(const Duration(seconds: 2), () {
+                              Navigator.pop(context);
+                            });
                           },
                           color: const Color.fromARGB(255, 14, 182, 159),
                         ),
